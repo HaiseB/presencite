@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Tableau de présence de la semaine</h2>
+  <table border="1">
+    <tr>
+      <th>Utilisateur</th>
+      {% for jour in jours %}
+        <th>{{ jour|date:"D d/m" }}</th>
+      {% endfor %}
+    </tr>
+    {% for ligne in tableau %}
+      <tr>
+        <td>{{ ligne.user.username }}</td>
+        {% for emoji in ligne.jours %}
+          <td style="text-align:center; font-size:1.5em;">{{ emoji }}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
