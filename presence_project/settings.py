@@ -67,6 +67,10 @@ TEMPLATES = [
     },
 ]
 
+TEMPLATES[0]['OPTIONS']['context_processors'] += [
+    'presence.context_processors.marquee_message',
+]
+
 WSGI_APPLICATION = 'presence_project.wsgi.application'
 
 
