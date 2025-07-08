@@ -2,12 +2,12 @@
 {% block content %}
 <h1 class="heading-xl text-white mb-1">Présences de la semaine</h1>
 <div class="table-responsive p-3">
-  <table class="table table-bordered table-hover table-striped align-middle bg-white">
+  <table class="table table-bordered table-hover table-striped align-middle bg-white rounded-xl">
     <thead class="table-dark">
       <tr>
-        <th scope="col rounded">Utilisateur</th>
+        <th scope="col rounded">utilisateur</th>
         {% for jour in jours %}
-          <th scope="col">{{ jour|date:"D d/m" }}</th>
+          <th scope="col">{{ jour|date:"l d/m" }}</th>
         {% endfor %}
       </tr>
     </thead>

@@ -181,8 +181,10 @@ header h1 {
     height: 30px;
 }
 
-.table-responsive {
-    border-radius: 200px;
+.rounded-xl {
+    border-radius: var(--radius);
+    overflow: hidden; /* important */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* ombre plus marquée */
 }
 
 .marquee-container {
