@@ -25,3 +25,52 @@
 ```bash
 git clone https://github.com/ton-utilisateur/presencite.git
 cd presencite
+```
+
+### 2. Créer et activer un environnement virtuel
+```bash
+python -m venv venv
+```
+Windows :
+```bash
+venv\Scripts\activate
+```
+macOS/Linux :
+
+```bash
+source venv/bin/activate
+```
+
+### 3. Installer les dépendances
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Appliquer les migrations
+```bash
+python manage.py migrate
+```
+
+### 5. Créer un superutilisateur (optionnel, pour l'admin)
+```bash
+python manage.py createsuperuser
+```
+
+### 6. Lancer le serveur de développement
+```bash
+python manage.py runserver
+```
+
+## 🚀 Utilisation
+Accès au site : http://127.0.0.1:8000
+
+Accès à l’interface d’administration : http://127.0.0.1:8000/admin
+
+## 🔧 Stack technique
+- Python 3.10+
+- Django 4.2+
+- SQLite (par défaut, peut être remplacée par PostgreSQL)
+- HTML/CSS minimaliste (possibilité de styliser avec Tailwind ou Bootstrap)
+
+## 📄 Licence
+Ce projet est open-source sous licence MIT.

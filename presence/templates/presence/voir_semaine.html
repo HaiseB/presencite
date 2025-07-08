@@ -1,20 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Tableau de présence de la semaine</h2>
-  <table border="1">
-    <tr>
-      <th>Utilisateur</th>
-      {% for jour in jours %}
-        <th>{{ jour|date:"D d/m" }}</th>
-      {% endfor %}
-    </tr>
-    {% for ligne in tableau %}
+<h1 class="heading-xl text-white mb-1">Présences de la semaine</h1>
+<div class="table-responsive p-3">
+  <table class="table table-bordered table-hover table-striped align-middle bg-white">
+    <thead class="table-dark">
       <tr>
-        <td>{{ ligne.user.username }}</td>
-        {% for emoji in ligne.jours %}
-          <td style="text-align:center; font-size:1.5em;">{{ emoji }}</td>
+        <th scope="col rounded">Utilisateur</th>
+        {% for jour in jours %}
+          <th scope="col">{{ jour|date:"D d/m" }}</th>
         {% endfor %}
       </tr>
-    {% endfor %}
+    </thead>
+    <tbody>
+      {% for ligne in tableau %}
+        <tr>
+          <td>{{ ligne.user.username }}</td>
+          {% for emoji in ligne.jours %}
+            <td class="text-center" style="font-size: 1.5em;">{{ emoji }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
   </table>
+</div>
+<div class="mt-4">
+  <button class="btn btn-dark">Enregistrer</button>
+</div>
 {% endblock %}

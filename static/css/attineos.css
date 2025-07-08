@@ -1,0 +1,219 @@
+:root {
+    --color-primary: #f7941e;
+    --color-secondary: #23272b;
+    --color-bg: #fff;
+    --color-bg-light: #f7f7f9;
+    --color-text: #212529;
+    --color-border: #e0e0e0;
+
+    --font-main: 'Source Code Pro', monospace;
+    --font-title: 'Tourney', sans-serif;
+    --font-deco: 'Bitcount Grid Double', sans-serif;
+
+    --radius: 8px;
+    --shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
+    --section-padding: 2.5rem 1.5rem;
+}
+
+body {
+    font-family: var(--font-main);
+    background: var(--color-bg);
+    color: var(--color-text);
+    margin: 0;
+}
+
+header {
+    background-color: var(--color-primary);
+    padding: 1rem 2rem;
+    color: var(--color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* Titres */
+.heading-xl {
+    font-family: var(--font-deco);
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-secondary);
+    margin-bottom: 1.2rem;
+    margin-top: 0.8rem;
+}
+
+.heading-sm {
+    font-family: var(--font-deco);
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+    margin-bottom: 0.7rem;
+}
+
+/* Paragraphe */
+.body-text {
+    font-family: var(--font-main);
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+}
+
+/* Container / Section */
+.section {
+    background: var(--color-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: var(--section-padding);
+    margin-bottom: 2rem;
+}
+
+.card,
+.box {
+    background: var(--color-bg-light);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Formulaire */
+.form-input {
+    width: 100%;
+    padding: 0.9rem 1.1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    font-family: var(--font-main);
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 1px 4px rgba(44, 62, 80, 0.06);
+    transition: border 0.2s;
+}
+
+.form-input:focus {
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+.form-label {
+    display: none;
+    /* Utilisation du placeholder */
+}
+
+.form-radio-group {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.2rem;
+}
+
+.form-radio {
+    accent-color: var(--color-primary);
+    border-radius: 50%;
+}
+
+/* Boutons */
+.btn-primary {
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    color: #fff !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    color: #fff !important;
+    opacity: 0.9;
+}
+
+/* Navigation */
+.navbar {
+    background: var(--color-bg);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
+    border-radius: 20px;
+}
+
+.navbar a {
+    color: var(--color-secondary);
+    font-family: var(--font-main);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0 1.5rem;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    font-size: 1.05rem;
+}
+
+.navbar a:hover {
+    color: var(--color-primary);
+}
+
+.hero-section {
+    position: relative;
+    background-color: var(--color-primary);
+    background-size: cover;
+    background-position: center;
+    border-radius: 0 0 0px 200px;
+    padding: 2em;
+    color: var(--color-bg);
+    text-align: center;
+}
+
+.hero-section button.btn-primary {
+    margin-top: 2rem;
+}
+
+.logo {
+    width: 140px;
+    height: 30px;
+}
+
+.table-responsive {
+    border-radius: 200px;
+}
+
+.marquee-container {
+    width: 100%;
+    color: var(--color-secondary);
+    overflow: hidden;
+    z-index: 9999;
+    background: var(--color-bg);
+    padding: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
+    border-radius: 20px;
+    margin-top: 0.5rem;
+}
+
+.marquee {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll-left 15s linear infinite;
+    font-weight: bold;
+    padding-left: 100%; /* décalage pour démarrer en dehors de l'écran */
+    width: max-content; /* évite d'écraser le contenu */
+}
+
+@keyframes scroll-left {
+    from {
+        transform: translateX(0%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
