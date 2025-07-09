@@ -48,17 +48,27 @@ def voir_semaine(request):
     jours = [lundi + datetime.timedelta(days=i) for i in range(5)]
     User = get_user_model()
     users = User.objects.all()
-    # Récupérer toutes les présences de la semaine
     presences = Presence.objects.filter(date__in=jours)
-    # Organiser les présences par utilisateur et par jour
     tableau = []
+    utilisateurs_non_remplis = []
+
     for user in users:
         ligne = {'user': user, 'jours': []}
+        jours_remplis = 0
         for jour in jours:
             p = presences.filter(user=user, date=jour).first()
-            ligne['jours'].append(p.emoji if p else '')
-        tableau.append(ligne)
+            if p:
+                ligne['jours'].append(p.emoji)
+                jours_remplis += 1
+            else:
+                ligne['jours'].append('')
+        if jours_remplis == len(jours):
+            tableau.append(ligne)  # Ajoute au tableau SEULEMENT si la semaine est complète
+        else:
+            utilisateurs_non_remplis.append(user)
+
     return render(request, 'presence/voir_semaine.html', {
         'tableau': tableau,
         'jours': jours,
+        'utilisateurs_non_remplis': utilisateurs_non_remplis,
     })

@@ -23,7 +23,31 @@
     </tbody>
   </table>
 </div>
-<div class="mt-4">
-  <button class="btn btn-dark">Enregistrer</button>
+{% if not semaine_verrouillee %}
+    <button class="btn btn-dark">Enregistrer</button>
+{% else %}
+    <div class="alert alert-success">
+        Semaine déjà validée, modification impossible.
+    </div>
+{% endif %}
+
+<div class="d-flex justify-content-end">
+{% if utilisateurs_non_remplis %}
+  <div class="card text-white bg-dark mb-3" style="max-width: 20rem;">
+  <div class="card-header">Utilisateurs n’ayant pas rempli leurs présences</div>
+  <div class="card-body">
+    <p class="card-text">
+      {% for user in utilisateurs_non_remplis %}
+        {{ user.username }}{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </p>
+  </div>
+  </div>
+{% else %}
+  <div class="alert alert-success rounded-xl shadow-sm p-4 mt-4">
+    🎉 Tous les utilisateurs ont rempli leurs présences ! 🎉
+  </div>
+{% endif %}
 </div>
+
 {% endblock %}
