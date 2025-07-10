@@ -7,18 +7,22 @@ import datetime
 from django.contrib.auth import get_user_model
 
 @login_required
-def remplir_semaine(request):
-    user = request.user
+def voir_semaine(request):
     today = timezone.now().date()
     lundi = today - datetime.timedelta(days=today.weekday())
     jours = [lundi + datetime.timedelta(days=i) for i in range(5)]
+    User = get_user_model()
+    users = [u for u in User.objects.all() if hasattr(u, 'profile') and u.profile.visible_in_tableau]
+    presences = Presence.objects.filter(date__in=jours)
+    tableau = []
+    utilisateurs_non_remplis = []
 
-    # Vérifier si la semaine est déjà verrouillée
-    presences = Presence.objects.filter(user=user, date__in=jours)
-    if presences.exists() and all(p.locked for p in presences):
-        return render(request, 'presence/semaine_verrouillee.html', {'presences': presences, 'jours': jours})
+    # Gestion du formulaire de présence pour l'utilisateur connecté
+    user = request.user
+    user_presences = presences.filter(user=user)
+    semaine_verrouillee = user_presences.exists() and all(p.locked for p in user_presences)
 
-    if request.method == 'POST':
+    if request.method == 'POST' and not semaine_verrouillee:
         form = SemainePresenceForm(request.POST)
         if form.is_valid():
             for i, jour in enumerate(jours):
@@ -27,31 +31,17 @@ def remplir_semaine(request):
                 presence, created = Presence.objects.get_or_create(user=user, date=jour)
                 presence.emoji = emoji
                 presence.status = status
-                presence.locked = True  # On verrouille la saisie après validation
+                presence.locked = True
                 presence.save()
-            return redirect('presence:remplir_semaine')
+            return redirect('presence:voir_semaine')
     else:
         # Pré-remplir le formulaire si déjà rempli
         initial = {}
         for i, jour in enumerate(jours):
-            p = presences.filter(date=jour).first()
+            p = user_presences.filter(date=jour).first()
             if p:
                 initial[f'emoji_{i}'] = p.emoji
         form = SemainePresenceForm(initial=initial)
-
-    return render(request, 'presence/remplir_semaine.html', {'form': form, 'jours': jours})
-
-@login_required
-def voir_semaine(request):
-    today = timezone.now().date()
-    lundi = today - datetime.timedelta(days=today.weekday())
-    jours = [lundi + datetime.timedelta(days=i) for i in range(5)]
-    User = get_user_model()
-    # On ne garde que les utilisateurs dont le profil est visible
-    users = [u for u in User.objects.all() if hasattr(u, 'profile') and u.profile.visible_in_tableau]
-    presences = Presence.objects.filter(date__in=jours)
-    tableau = []
-    utilisateurs_non_remplis = []
 
     for user in users:
         ligne = {'user': user, 'jours': []}
@@ -64,16 +54,18 @@ def voir_semaine(request):
             else:
                 ligne['jours'].append('')
         if jours_remplis == len(jours):
-            tableau.append(ligne)  # Ajoute au tableau SEULEMENT si la semaine est complète
+            tableau.append(ligne)
         else:
             utilisateurs_non_remplis.append(user)
 
-    total_presences = presences.filter(status='present').count()
     total_presences_par_jour = []
     for jour in jours:
         total = presences.filter(date=jour, status='present').count()
         total_presences_par_jour.append((jour, total))
+
     return render(request, 'presence/voir_semaine.html', {
+        'form': form,
+        'semaine_verrouillee': semaine_verrouillee,
         'tableau': tableau,
         'jours': jours,
         'utilisateurs_non_remplis': utilisateurs_non_remplis,

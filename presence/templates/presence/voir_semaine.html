@@ -1,59 +1,92 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 <h1 class="heading-xl text-white mb-1">Présences de la semaine</h1>
 <div class="table-responsive p-3">
-  <table class="table table-bordered table-hover table-striped align-middle bg-white rounded-xl">
-    <thead class="table-dark">
-      <tr>
-        <th scope="col rounded">utilisateur</th>
-        {% for jour in jours %}
-          <th scope="col">{{ jour|date:"l d/m" }}</th>
-        {% endfor %}
-      </tr>
-    </thead>
-    <tbody>
-      {% for ligne in tableau %}
+  <form method="post">
+    {% csrf_token %}
+    <table class="table table-bordered table-hover table-striped align-middle bg-white rounded-xl">
+      <thead class="table-dark">
         <tr>
-          <td>{{ ligne.user.username }}</td>
-          {% for emoji in ligne.jours %}
-            <td class="text-center" style="font-size: 1.5em;">{{ emoji }}</td>
+          <th scope="col ellipsis">Utilisateur</th>
+          {% for jour in jours %}
+            <th scope="col">{{ jour|date:"l d/m" }}</th>
           {% endfor %}
         </tr>
-      {% endfor %}
-      <tr>
-        <td>Total présences</td>
-        {% for jour, total in total_presences_par_jour %}
-          <td class="text-center" style="font-size: 1.5em;">{{ total }}</td>
+      </thead>
+      <tbody>
+        {% for ligne in tableau %}
+        <tr class="ligne-detaillee">
+          <td class="ellipsis">{{ ligne.user.username }}</td>
+          {% for emoji in ligne.jours %}
+          <td class="text-center" style="font-size: 1.5em;">{{ emoji }}</td>
+          {% endfor %}
+        </tr>
         {% endfor %}
-      </tr>
-    </tbody>
-  </table>
+
+        <tr>
+          <td class="ellipsis">Total présences</td>
+          {% for jour, total in total_presences_par_jour %}
+          <td class="text-center" style="font-size: 1.5em;">{{ total }}</td>
+          {% endfor %}
+        </tr>
+
+        {% if not semaine_verrouillee %}
+        <tr>
+          <td>Mes présences</td>
+          {% for field in form %}
+          <td>{{ field }}</td>
+          {% endfor %}
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+
+    {% if not semaine_verrouillee %}
+    <button type="submit" class="btn btn-dark">Valider ma semaine</button>
+    {% endif %}
+  </form>
 </div>
-{% if not semaine_verrouillee %}
-    <button class="btn btn-dark">Enregistrer</button>
-{% else %}
-    <div class="alert alert-success">
-        Semaine déjà validée, modification impossible.
-    </div>
-{% endif %}
 
 <div class="d-flex justify-content-end">
-{% if utilisateurs_non_remplis %}
+  {% if utilisateurs_non_remplis %}
   <div class="card text-white bg-dark mb-3" style="max-width: 20rem;">
-  <div class="card-header">Utilisateurs n’ayant pas rempli leurs présences</div>
-  <div class="card-body">
-    <p class="card-text">
-      {% for user in utilisateurs_non_remplis %}
+    <div class="card-header">Utilisateurs n’ayant pas rempli leurs présences</div>
+    <div class="card-body">
+      <p class="card-text">
+        {% for user in utilisateurs_non_remplis %}
         {{ user.username }}{% if not forloop.last %}, {% endif %}
-      {% endfor %}
-    </p>
+        {% endfor %}
+      </p>
+    </div>
   </div>
-  </div>
-{% else %}
-  <div class="alert alert-success rounded-xl shadow-sm p-4 mt-4">
+  {% else %}
+  <div id="message-validation-tous" class="alert alert-success rounded-xl shadow-sm p-4 mt-4">
     🎉 Tous les utilisateurs ont rempli leurs présences ! 🎉
   </div>
 {% endif %}
 </div>
 
+<p class="d-inline-flex gap-1">
+<div class="d-flex justify-content-end">
+  <button class="btn btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOption"
+    aria-expanded="false" aria-controls="collapseOption">
+    Options </button>
+</div>
+</p>
+<div class="collapse" id="collapseOption">
+  <div class="d-flex justify-content-end">
+    <div class="alert alert-light rounded-xl shadow-sm p-4">
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="switchModeDetaille" checked>
+        <label class="form-check-label" for="switchModeDetaille">Activer le mode détaillé</label>
+      </div>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="switchAfficherValidation" checked>
+        <label class="form-check-label" for="switchAfficherValidation">Afficher "Présences validées pour tous"</label>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="{% static 'js/presence_tableau.js' %}"></script>
 {% endblock %}

@@ -22,6 +22,12 @@ body {
     margin: 0;
 }
 
+.ellipsis {
+    white-space: nowrap;        /* Empêche le retour à la ligne */
+    overflow: hidden;           /* Cache le texte qui dépasse */
+    text-overflow: ellipsis;    /* Remplace le texte coupé par "..." */
+}
+
 header {
     background-color: var(--color-primary);
     padding: 1rem 2rem;
