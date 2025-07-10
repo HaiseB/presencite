@@ -35,11 +35,13 @@
                 <a href="#">Se déco <i class="fa-solid fa-right-from-bracket"></i></a>
             </div>
         </nav>
-        <div class="marquee-container">
-            <div class="marquee">
-                {{ marquee_message }}
+        {% if marquee_message %}
+            <div class="marquee-container">
+                <div class="marquee">
+                    {{ marquee_message }}
+                </div>
             </div>
-        </div>
+        {% endif %}
         {% block content %}{% endblock %}
     </section>
 </body>

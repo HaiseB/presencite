@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .forms import SemainePresenceForm
-from .models import Presence
+from .models import Presence, Profile
 import datetime
 from django.contrib.auth import get_user_model
 
@@ -47,7 +47,8 @@ def voir_semaine(request):
     lundi = today - datetime.timedelta(days=today.weekday())
     jours = [lundi + datetime.timedelta(days=i) for i in range(5)]
     User = get_user_model()
-    users = User.objects.all()
+    # On ne garde que les utilisateurs dont le profil est visible
+    users = [u for u in User.objects.all() if hasattr(u, 'profile') and u.profile.visible_in_tableau]
     presences = Presence.objects.filter(date__in=jours)
     tableau = []
     utilisateurs_non_remplis = []
@@ -67,8 +68,14 @@ def voir_semaine(request):
         else:
             utilisateurs_non_remplis.append(user)
 
+    total_presences = presences.filter(status='present').count()
+    total_presences_par_jour = []
+    for jour in jours:
+        total = presences.filter(date=jour, status='present').count()
+        total_presences_par_jour.append((jour, total))
     return render(request, 'presence/voir_semaine.html', {
         'tableau': tableau,
         'jours': jours,
         'utilisateurs_non_remplis': utilisateurs_non_remplis,
+        'total_presences_par_jour': total_presences_par_jour,
     })

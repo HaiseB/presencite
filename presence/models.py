@@ -22,6 +22,14 @@ class Presence(models.Model):
 class MarqueeMessage(models.Model):
     message = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    afficher = models.BooleanField(default=False)
 
     def __str__(self):
         return self.message
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    visible_in_tableau = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"Profil de {self.user.username}"

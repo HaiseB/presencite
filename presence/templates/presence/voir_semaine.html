@@ -20,6 +20,12 @@
           {% endfor %}
         </tr>
       {% endfor %}
+      <tr>
+        <td>Total présences</td>
+        {% for jour, total in total_presences_par_jour %}
+          <td class="text-center" style="font-size: 1.5em;">{{ total }}</td>
+        {% endfor %}
+      </tr>
     </tbody>
   </table>
 </div>
