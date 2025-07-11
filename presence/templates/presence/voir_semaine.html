@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 {% load static %}
+{% load presence_extras %}
 {% block content %}
 <h1 class="heading-xl text-white mb-1">Présences de la semaine</h1>
-<div class="table-responsive p-3">
-  <form method="post">
-    {% csrf_token %}
+<form method="post">
+  {% csrf_token %}
+  <div class="table-responsive p-3 d-none d-md-block">
     <table class="table table-bordered table-hover table-striped align-middle bg-white rounded-xl">
       <thead class="table-dark">
         <tr>
           <th scope="col ellipsis">Utilisateur</th>
           {% for jour in jours %}
-            <th scope="col">{{ jour|date:"l d/m" }}</th>
+          <th scope="col">{{ jour|date:"l d/m" }}</th>
           {% endfor %}
         </tr>
       </thead>
@@ -23,30 +24,68 @@
           {% endfor %}
         </tr>
         {% endfor %}
-
         <tr>
           <td class="ellipsis">Total présences</td>
           {% for jour, total in total_presences_par_jour %}
           <td class="text-center" style="font-size: 1.5em;">{{ total }}</td>
           {% endfor %}
         </tr>
-
         {% if not semaine_verrouillee %}
         <tr>
           <td>Mes présences</td>
           {% for field in form %}
-          <td>{{ field }}</td>
+            <td>{{ field }}</td>
           {% endfor %}
         </tr>
         {% endif %}
       </tbody>
     </table>
+  </div>
 
+  <!-- Tableau mobile (transposé) -->
+  <div class="table-responsive p-3 d-block d-md-none">
+    <table class="table table-bordered table-hover table-striped align-middle bg-white rounded-xl">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Jour</th>
+          <th scope="col">Total</th>
+          {% for ligne in tableau %}
+          <th scope="col" class="ellipsis ligne-detaillee">{{ ligne.user.username }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for jour in jours %}
+        <tr>
+          <td>{{ jour|date:"l d/m" }}</td>
+          <td class="text-center" style="font-size: 1.5em;">{{ total_presences_par_jour|index:forloop.counter0|last }}
+          </td>
+          {% for ligne in tableau %}
+          <td class="text-center ligne-detaillee" style="font-size: 1.5em;">{{ ligne.jours|index:forloop.counter0 }}
+          </td>
+          {% endfor %}
+          {% if not semaine_verrouillee %}
+          
+        {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
     {% if not semaine_verrouillee %}
-    <button type="submit" class="btn btn-dark">Valider ma semaine</button>
+      <table>
+        {% for field in form %}
+          <tr>
+            <td class="ellipsis">{{ field.label_tag }}</td>
+            <td>{{ field }}</td>
+          </tr>
+        {% endfor %}
+      </table>
     {% endif %}
-  </form>
-</div>
+  </div>
+  {% if not semaine_verrouillee %}
+  <button type="submit" class="btn btn-success mb-2">Valider ma semaine</button>
+  {% endif %}
+</form>
 
 <div class="d-flex justify-content-end">
   {% if utilisateurs_non_remplis %}
@@ -64,7 +103,7 @@
   <div id="message-validation-tous" class="alert alert-success rounded-xl shadow-sm p-4 mt-4">
     🎉 Tous les utilisateurs ont rempli leurs présences ! 🎉
   </div>
-{% endif %}
+  {% endif %}
 </div>
 
 <p class="d-inline-flex gap-1">
