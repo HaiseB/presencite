@@ -52,21 +52,30 @@
           {% for ligne in tableau %}
           <th scope="col" class="ellipsis ligne-detaillee">{{ ligne.user.username }}</th>
           {% endfor %}
+          {% if not semaine_verrouillee %}
+            <th scope="col">Mes présences</th>
+          {% endif %}
         </tr>
       </thead>
       <tbody>
         {% for jour in jours %}
         <tr>
           <td>{{ jour|date:"l d/m" }}</td>
-          <td class="text-center" style="font-size: 1.5em;">{{ total_presences_par_jour|index:forloop.counter0|last }}
+          <td class="text-center" style="font-size: 1.5em;">
+            {{ total_presences_par_jour|index:forloop.counter0|last }}
           </td>
           {% for ligne in tableau %}
-          <td class="text-center ligne-detaillee" style="font-size: 1.5em;">{{ ligne.jours|index:forloop.counter0 }}
-          </td>
+            <td class="text-center ligne-detaillee" style="font-size: 1.5em;">
+              {{ ligne.jours|index:forloop.counter0 }}
+            </td>
           {% endfor %}
           {% if not semaine_verrouillee %}
-          
-        {% endif %}
+            {% for field in form %}
+            <td class="text-center" style="font-size: 1.5em;">
+              {{ field.label_tag|index:forloop.counter0 }}
+            </td>
+            {% endfor %}
+          {% endif %}
         </tr>
         {% endfor %}
       </tbody>
@@ -83,7 +92,7 @@
     {% endif %}
   </div>
   {% if not semaine_verrouillee %}
-  <button type="submit" class="btn btn-success mb-2">Valider ma semaine</button>
+    <button type="submit" class="btn btn-success mb-2">Valider ma semaine</button>
   {% endif %}
 </form>
 
