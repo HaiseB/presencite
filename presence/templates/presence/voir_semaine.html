@@ -3,9 +3,11 @@
 {% load presence_extras %}
 {% block content %}
 <h1 class="heading-xl text-white mb-1">Présences de la semaine</h1>
-<form method="post">
+
+<!-- FORMULAIRE DESKTOP -->
+<form method="post" class="d-none d-md-block">
   {% csrf_token %}
-  <div class="table-responsive p-3 d-none d-md-block">
+  <div class="table-responsive p-3">
     <table class="table table-bordered table-hover table-striped align-middle bg-white rounded-xl">
       <thead class="table-dark">
         <tr>
@@ -41,20 +43,24 @@
       </tbody>
     </table>
   </div>
+  {% if not semaine_verrouillee %}
+    <button type="submit" class="btn btn-success mb-2">Valider ma semaine</button>
+  {% endif %}
+</form>
 
+<!-- FORMULAIRE MOBILE -->
+<form method="post" class="d-block d-md-none">
+  {% csrf_token %}
+  <div class="table-responsive p-3">
   <!-- Tableau mobile (transposé) -->
-  <div class="table-responsive p-3 d-block d-md-none">
     <table class="table table-bordered table-hover table-striped align-middle bg-white rounded-xl">
       <thead class="table-dark">
         <tr>
           <th scope="col">Jour</th>
           <th scope="col">Total</th>
           {% for ligne in tableau %}
-          <th scope="col" class="ellipsis ligne-detaillee">{{ ligne.user.username }}</th>
+            <th scope="col" class="ellipsis ligne-detaillee">{{ ligne.user.username }}</th>
           {% endfor %}
-          {% if not semaine_verrouillee %}
-            <th scope="col">Mes présences</th>
-          {% endif %}
         </tr>
       </thead>
       <tbody>
@@ -69,13 +75,6 @@
               {{ ligne.jours|index:forloop.counter0 }}
             </td>
           {% endfor %}
-          {% if not semaine_verrouillee %}
-            {% for field in form %}
-            <td class="text-center" style="font-size: 1.5em;">
-              {{ field.label_tag|index:forloop.counter0 }}
-            </td>
-            {% endfor %}
-          {% endif %}
         </tr>
         {% endfor %}
       </tbody>

@@ -21,6 +21,7 @@ JOURS_SEMAINE = [
 
 class SemainePresenceForm(forms.Form):
     def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '')
         super().__init__(*args, **kwargs)
         today = datetime.date.today()
         lundi = today - datetime.timedelta(days=today.weekday())
