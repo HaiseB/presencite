@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container login-container">
+    <h1 class="heading-xl text-white mb-1">Connexion</h1>
+    <div class="login-section  mt-3">
+        {% if form.errors %}
+            <div class="login-alert">
+                <i class="fa-solid fa-exclamation-triangle me-2"></i>Identifiants invalides. Veuillez réessayer.
+            </div>
+        {% endif %}
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_username" class="login-form-label">Nom d'utilisateur</label>
+                <input type="text" name="username" id="id_username" class="form-input" autofocus required>
+            </div>
+            <div class="mb-3">
+                <label for="id_password" class="login-form-label">Mot de passe</label>
+                <input type="password" name="password" id="id_password" class="form-input" required>
+            </div>
+            <button type="submit" class="btn btn-primary login-btn">
+                <i class="fa-solid fa-right-to-bracket me-2"></i>Se connecter
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

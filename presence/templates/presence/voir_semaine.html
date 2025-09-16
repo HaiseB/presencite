@@ -7,7 +7,7 @@
 <!-- FORMULAIRE DESKTOP -->
 <form method="post" class="d-none d-md-block">
   {% csrf_token %}
-  <div class="table-responsive p-3">
+  <div class="table-responsive pt-3 pb-3">
     <table class="table table-bordered table-hover table-striped align-middle bg-white rounded-xl">
       <thead class="table-dark">
         <tr>
@@ -51,7 +51,7 @@
 <!-- FORMULAIRE MOBILE -->
 <form method="post" class="d-block d-md-none">
   {% csrf_token %}
-  <div class="table-responsive p-3">
+  <div class="table-responsive pt-3 pb-3">
   <!-- Tableau mobile (transposé) -->
     <table class="table table-bordered table-hover table-striped align-middle bg-white rounded-xl">
       <thead class="table-dark">
@@ -114,23 +114,34 @@
   {% endif %}
 </div>
 
-<p class="d-inline-flex gap-1">
 <div class="d-flex justify-content-end">
-  <button class="btn btn-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOption"
-    aria-expanded="false" aria-controls="collapseOption">
-    Options </button>
+  <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#optionsModal">
+    <i class="fa-solid fa-gear me-2"></i>Options
+  </button>
 </div>
-</p>
-<div class="collapse" id="collapseOption">
-  <div class="d-flex justify-content-end">
-    <div class="alert alert-light rounded-xl shadow-sm p-4">
-      <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" role="switch" id="switchModeDetaille" checked>
-        <label class="form-check-label" for="switchModeDetaille">Activer le mode détaillé</label>
+
+<!-- Modal Options -->
+<div class="modal fade modal-attineos" id="optionsModal" tabindex="-1" aria-labelledby="optionsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="optionsModalLabel">
+          <i class="fa-solid fa-gear me-2"></i>Options d'affichage
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" role="switch" id="switchAfficherValidation" checked>
-        <label class="form-check-label" for="switchAfficherValidation">Afficher "Présences validées pour tous"</label>
+      <div class="modal-body">
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" role="switch" id="switchModeDetaille" checked>
+          <label class="form-check-label" for="switchModeDetaille">Activer le mode détaillé</label>
+        </div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="switchAfficherValidation" checked>
+          <label class="form-check-label" for="switchAfficherValidation">Afficher "Présences validées pour tous"</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
       </div>
     </div>
   </div>

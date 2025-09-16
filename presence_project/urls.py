@@ -16,8 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import LogoutView
+from django.views.generic import RedirectView
+
+class LogoutViewAllowGet(LogoutView):
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('logout/', LogoutViewAllowGet.as_view(), name='logout'),
+    path('', RedirectView.as_view(url='/presence/', permanent=False)),
     path('presence/', include('presence.urls')),
 ]

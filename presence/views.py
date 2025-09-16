@@ -1,10 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.http import JsonResponse
 from .forms import SemainePresenceForm
 from .models import Presence, Profile
 import datetime
+import os
+import markdown
 from django.contrib.auth import get_user_model
+from django.conf import settings
 
 @login_required
 def voir_semaine(request):
@@ -71,3 +75,40 @@ def voir_semaine(request):
         'utilisateurs_non_remplis': utilisateurs_non_remplis,
         'total_presences_par_jour': total_presences_par_jour,
     })
+
+def get_changelog(request):
+    """Vue pour récupérer le contenu du changelog en format HTML"""
+    try:
+        # Chemin vers le fichier changelog.md
+        changelog_path = os.path.join(settings.BASE_DIR, 'changelog.md')
+        
+        # Obtenir la date de dernière modification
+        last_modified = os.path.getmtime(changelog_path)
+        from datetime import datetime
+        last_modified_date = datetime.fromtimestamp(last_modified).strftime('%d/%m/%Y à %H:%M')
+        
+        # Lire le fichier markdown
+        with open(changelog_path, 'r', encoding='utf-8') as file:
+            markdown_content = file.read()
+        
+        # Convertir le markdown en HTML
+        html_content = markdown.markdown(markdown_content, extensions=['extra', 'codehilite'])
+        
+        # Remplacer le titre H1 "Changelog" par la date de dernière modification
+        import re
+        html_content = re.sub(r'<h1>Changelog</h1>', f'<h4 class="text-muted"><i class="fa-solid fa-clock me-2"></i>Dernière mise à jour: {last_modified_date}</h4>', html_content)
+        
+        return JsonResponse({
+            'success': True,
+            'content': html_content
+        })
+    except FileNotFoundError:
+        return JsonResponse({
+            'success': False,
+            'error': 'Fichier changelog.md non trouvé'
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': f'Erreur lors de la lecture du changelog: {str(e)}'
+        })
