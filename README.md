@@ -1,4 +1,4 @@
-# 📅 Presencité – Gestion de présence avec émojis 🧑‍💼✅❌
+# 📅 Presencite – Gestion de présence avec émojis 🧑‍💼✅❌
 
 **Presencité** est une application web développée avec **Django** qui permet aux utilisateurs d'indiquer leur présence sur site pour chaque jour de la semaine, en utilisant un système simple et ludique d’émojis.
 
@@ -58,7 +58,7 @@ python manage.py createsuperuser
 
 ### 6. Lancer le serveur de développement
 ```bash
-python manage.py runserver
+python manage.py runserver 0.0.0.0:8000
 ```
 
 ## 🚀 Utilisation
