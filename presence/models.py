@@ -28,7 +28,7 @@ class MarqueeMessage(models.Model):
         return self.message
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     visible_in_tableau = models.BooleanField(default=True)
 
     def __str__(self):
