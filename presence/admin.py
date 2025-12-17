@@ -66,8 +66,8 @@ class ProfileAdmin(admin.ModelAdmin):
     
     def user_is_staff(self, obj):
         if obj.user.is_staff:
-            return format_html('<span style="color: green;">✓ Admin</span>')
-        return format_html('<span style="color: gray;">Utilisateur</span>')
+            return mark_safe('<span style="color: green;">✓ Admin</span>')
+        return mark_safe('<span style="color: gray;">Utilisateur</span>')
     user_is_staff.short_description = 'Statut'
 
 # Administration personnalisée pour les Messages Marquee
@@ -102,9 +102,11 @@ class MarqueeMessageAdmin(admin.ModelAdmin):
 # Personnalisation de l'administration des utilisateurs
 class ProfileInline(admin.StackedInline):
     model = Profile
+    fk_name = 'user'          # 🔴 IMPORTANT
     can_delete = False
     verbose_name_plural = 'Profil'
     fields = ['visible_in_tableau']
+    extra = 0
 
 class CustomUserAdmin(UserAdmin):
     inlines = (ProfileInline,)
