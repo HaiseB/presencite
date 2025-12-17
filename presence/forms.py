@@ -4,11 +4,9 @@ import datetime
 
 EMOJI_CHOICES = [
     ('✅', 'Présent (✅)'),
-    ('🏢', 'Présent (🏢)'),
     ('❌', 'Absent (❌)'),
     ('🎓', 'Absent (🎓)'),
     ('🌴', 'Absent (🌴)'),
-    ('👮', 'Absent (👮)'),
 ]
 
 JOURS_SEMAINE = [

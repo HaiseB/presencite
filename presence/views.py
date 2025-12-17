@@ -31,7 +31,7 @@ def voir_semaine(request):
         if form.is_valid():
             for i, jour in enumerate(jours):
                 emoji = form.cleaned_data[f'emoji_{i}']
-                status = 'present' if emoji in ['✅', '🏢'] else 'absent'
+                status = 'present' if emoji in ['✅'] else 'absent'
                 presence, created = Presence.objects.get_or_create(user=user, date=jour)
                 presence.emoji = emoji
                 presence.status = status
